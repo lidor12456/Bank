@@ -45,6 +45,43 @@ const updateUser = (id, user) => {
   saveUsers(users);
   return updatedUser;
 };
+
+const transferCash = (firstId, secondId, user) => {
+  const users = loadUsers();
+  const foundFirstUser = users.find((m) => {
+    return m.id === firstId;
+  });
+  const foundSecondUser = users.find((m) => {
+    return m.id === secondId;
+  });
+
+  if (!foundFirstUser || !foundSecondUser) {
+    throw new Error("One or more users does not exist!");
+  }
+  if (foundFirstUser.cash + foundFirstUser.credit < user.cashToTransfer) {
+    throw new Error("There is no money");
+  }
+  const updatedFirstUser = {
+    ...foundFirstUser,
+    // ...user,
+    id: foundFirstUser.id,
+    cash: foundFirstUser.cash - user.cashToTransfer,
+  };
+  const updatedSecondUser = {
+    ...foundSecondUser,
+    // ...user,
+    id: foundSecondUser.id,
+    cash: foundSecondUser.cash + user.cashToTransfer,
+  };
+
+  const firstIndex = users.findIndex((m) => m.id === firstId);
+  const secondIndex = users.findIndex((m) => m.id === secondId);
+  users[firstIndex] = updatedFirstUser;
+  users[secondIndex] = updatedSecondUser;
+  saveUsers(users);
+  return updatedSecondUser;
+};
+
 const deleteUser = (id) => {
   const users = loadUsers();
   const index = users.findIndex((m) => m.id === id);
@@ -72,4 +109,11 @@ const loadUsers = () => {
   }
 };
 
-export { loadUsers, addNewUser, findUser, updateUser, deleteUser };
+export {
+  loadUsers,
+  addNewUser,
+  findUser,
+  updateUser,
+  transferCash,
+  deleteUser,
+};

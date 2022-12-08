@@ -6,6 +6,7 @@ import {
   findUser,
   updateUser,
   deleteUser,
+  transferCash,
 } from "../controllers/controllers.js";
 
 const router = Router();
@@ -38,6 +39,16 @@ router.put("/:id", (req, res) => {
   const user = req.body;
   try {
     res.status(200).send(updateUser(id, user));
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+});
+router.put("/:firstId/:secondId", (req, res) => {
+  const { firstId } = req.params;
+  const { secondId } = req.params;
+  const user = req.body;
+  try {
+    res.status(200).send(transferCash(firstId, secondId, user));
   } catch (e) {
     res.status(400).send({ error: e.message });
   }
