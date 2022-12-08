@@ -5,6 +5,8 @@ const addNewUser = (user) => {
   const users = loadUsers();
   const newUser = {
     id: uniqId(),
+    cash: 0,
+    credit: 0,
     ...user,
   };
   users.push(newUser);
@@ -37,6 +39,30 @@ const updateUser = (id, user) => {
     ...foundUser,
     ...user,
     id: foundUser.id,
+    updatedAt: new Date().toISOString(),
+  };
+
+  const index = users.findIndex((m) => m.id === id);
+  users[index] = updatedUser;
+  saveUsers(users);
+  return updatedUser;
+};
+const deopst = (id, user) => {
+  const users = loadUsers();
+  const foundUser = users.find((m) => {
+    return m.id === id;
+  });
+
+  console.log(foundUser);
+
+  if (!foundUser) {
+    throw new Error("The user does not exist, cannot depositing!");
+  }
+
+  const updatedUser = {
+    ...foundUser,
+
+    cash: foundUser.cash + user.cashToAdd,
     updatedAt: new Date().toISOString(),
   };
 
@@ -115,5 +141,6 @@ export {
   findUser,
   updateUser,
   transferCash,
+  deopst,
   deleteUser,
 };

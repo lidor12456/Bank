@@ -7,6 +7,7 @@ import {
   updateUser,
   deleteUser,
   transferCash,
+  deopst,
 } from "../controllers/controllers.js";
 
 const router = Router();
@@ -39,6 +40,15 @@ router.put("/:id", (req, res) => {
   const user = req.body;
   try {
     res.status(200).send(updateUser(id, user));
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+});
+router.put("/depost/:id", (req, res) => {
+  const { id } = req.params;
+  const user = req.body;
+  try {
+    res.status(200).send(deopst(id, user));
   } catch (e) {
     res.status(400).send({ error: e.message });
   }
